@@ -18,7 +18,10 @@ module BotPlugins
         match_data = params.match(/start (.*)/)
         if match_data.length > 0
           job = match_data[1]
-          build_key = config.plugins.jenkins.keys.send(job.downcase)
+          job_key = job.downcase.gsub(/\s/,"_").gsub(/\W/,"").to_sym
+          build_key = ""
+          build_key = config.plugins.jenkins.keys.send(job.downcase) unless (config.methods - Object.methods - OpenStruct.instance_methods).include?(job_key)          
+          
           response = HTTParty.get("#{base_addr}/job/#{job}/build?token=#{build_key}&cause=IRC+command+from+#{m.user.nick}", options)
           m.reply("Kicking off build") if response.code.eql?(200)
         end
