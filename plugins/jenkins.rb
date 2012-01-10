@@ -19,8 +19,8 @@ module BotPlugins
         if match_data.length > 0
           job = match_data[1]
           build_key = config.plugins.jenkins.keys.send(job.downcase)
-          m.reply("#{base_addr}/job/#{job}/build?token=#{build_key}&cause=IRC+command+from+#{m.user.nick}")
-          HTTParty.get("#{base_addr}/job/#{job}/build?token=#{build_key}&cause=IRC+command+from+#{m.user.nick}", options)
+          response = HTTParty.get("#{base_addr}/job/#{job}/build?token=#{build_key}&cause=IRC+command+from+#{m.user.nick}", options)
+          m.reply("Kicking off build") if response.code.eql?(400)
         end
       else
         # just show an update
