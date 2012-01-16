@@ -5,11 +5,11 @@ module BotPlugins
   class QuickList
     include Cinch::Plugin
 
-    match /list (.+)/
+    match 'list'
   
     help "Shows available files to be played via VLC"
     
-    def execute(m, params)
+    def execute(m)
         config = HelperLib::SharedObject.instance(:config)
         start_path = config.plugins.music_path
       
